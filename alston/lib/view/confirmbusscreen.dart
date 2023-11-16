@@ -7,6 +7,7 @@ import 'package:alston/widgets/customelevatedbutton.dart';
 import 'package:alston/widgets/navigationdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/theme_controller.dart'; // Make sure to import your ThemeController
 
 class ConfirmBusScreen extends StatelessWidget {
@@ -54,10 +55,11 @@ class ConfirmBusScreen extends StatelessWidget {
                   'Are you Sure Operating The Bus With Number',
                   style: TextStyle(
                     color: themeController.isDarkMode.value
-                        ? AppColors.textColorDarker // Dark mode text color
+                        ? AppColors.backgroundColor // Dark mode text color
                         : AppColors.textColor, // Light mode text color
                     fontSize: textSizeMedium,
-                  ),
+                    fontWeight: FontWeight.w200,
+                  ).merge(GoogleFonts.josefinSans()),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: blockSpacing),
@@ -66,26 +68,35 @@ class ConfirmBusScreen extends StatelessWidget {
                   style: TextStyle(
                     color: themeController.isDarkMode.value
                         ? AppColors
-                            .primaryColorDarker // Dark mode primary color
+                            .backgroundColor // Dark mode primary color
                         : AppColors.primaryColor, // Light mode primary color
                     fontSize: textSizeLarge,
                     fontWeight: FontWeight.bold,
-                  ),
+                  ).merge(GoogleFonts.josefinSans()),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: screenHeight * 0.1),
                 CustomElevatedButton(
                   buttonText: 'Yes',
+                  buttonColor: themeController.isDarkMode.value
+                      ? AppColors.primaryColorDarker
+                      : AppColors.primaryColor,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   onPressed: () {
                     Get.offAll(const HomePage());
                   },
                 ),
                 SizedBox(height: buttonSpacing),
                 CustomElevatedButton(
-                  buttonColor: themeController.isDarkMode.value
-                      ? Colors.white // Dark mode button color
-                      : Colors.grey, // Default grey for light mode
                   buttonText: 'No',
+                  buttonColor: themeController.isDarkMode.value
+                      ? AppColors.backgroundColorsDarker
+                      : Colors.grey,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   onPressed: () {
                     Get.to(const NotConfirmBusScreen());
                   },

@@ -38,7 +38,7 @@ class SignInScreen extends StatelessWidget {
       double screenWidth = MediaQuery.of(context).size.width;
       double verticalPadding = screenHeight * 0.02;
       double headingFontSize = screenWidth * 0.1;
-      double subheadingFontSize = screenWidth * 0.05;
+      double subheadingFontSize = screenWidth * 0.04;
 
       return Scaffold(
         body: Container(
@@ -55,17 +55,25 @@ class SignInScreen extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.14),
                   Text(
                     'Welcome Back!',
-                    style: GoogleFonts.acme(
-                        fontSize: headingFontSize, color: textColor),
+                    style: GoogleFonts.lato(
+                      fontSize: headingFontSize,
+                      color: themeController.isDarkMode.value
+                          ? AppColors.backgroundColor
+                          : AppColors.backgroundColorDarker,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
+
                   SizedBox(height: screenHeight * 0.12),
                   Text(
                     'Please Sign In to start your shift',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.acme(
-                      color: primaryColor,
+                    style: GoogleFonts.josefinSans(
+                      color: themeController.isDarkMode.value
+                          ? AppColors.backgroundColor
+                          : AppColors.backgroundColorDarker,
                       fontSize: subheadingFontSize,
-                      fontWeight: FontWeight.w100,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                   SizedBox(height: verticalPadding),
@@ -94,12 +102,17 @@ class SignInScreen extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.07),
                   CustomElevatedButton(
                     buttonText: 'Sign In',
+                    buttonColor: themeController.isDarkMode.value
+                        ? AppColors.primaryColorDarker
+                        : AppColors.primaryColor,
+                    textColor: themeController.isDarkMode.value
+                        ? AppColors.whiteColor
+                        : AppColors.whiteColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         Get.offAll(const ConfirmBusScreen());
                       }
                     },
-                   
                   ),
                 ],
               ),

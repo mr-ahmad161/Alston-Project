@@ -6,7 +6,8 @@ import 'package:alston/view/shiftscreen.dart';
 import 'package:alston/view/sign_in_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:google_fonts/google_fonts.dart';
+import '../utils/theme_controller.dart';
 import '../view/endshift_screen.dart';
 import '../view/homepage.dart';
 import '../view/takearest_screen.dart';
@@ -16,12 +17,15 @@ class MyDrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final ThemeController themeController = Get.find<ThemeController>();
+    return Obx(() =>  Container(
         width: double.infinity,
         height: 245,
-        color: AppColors.primaryColor,
+        color:  themeController.isDarkMode.value
+            ? AppColors.primaryColor
+            : AppColors.backgroundColors,
         padding: const EdgeInsets.only(left: 15, bottom: 20),
-        child: const Column(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -38,11 +42,13 @@ class MyDrawerHeader extends StatelessWidget {
               'Imax Melbourne',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  fontSize: 20),
+                  color: themeController.isDarkMode.value
+                      ? AppColors.backgroundColor
+                      : AppColors.secondaryColor,
+                  fontSize: 20).merge(GoogleFonts.lato()),
             ),
           ],
-        ));
+        )));
   }
 }
 
@@ -77,6 +83,10 @@ Widget myDrawerList() {
 }
 
 Widget manuItem(String title, IconData? icon, Function()? onPressed) {
+  final ThemeController themeController = Get.find<ThemeController>();
+  Color getTextColor(bool isDarkMode) {
+    return isDarkMode ? AppColors.backgroundColor : AppColors.secondaryColor;
+  }
   return Material(
     child: InkWell(
       onTap: onPressed,
@@ -89,17 +99,22 @@ Widget manuItem(String title, IconData? icon, Function()? onPressed) {
               alignment: Alignment.centerLeft,
               child: Icon(
                 icon,
-                color: AppColors.primaryColor,
+                color: themeController.isDarkMode.value
+                    ? AppColors.backgroundColor
+                    : AppColors.secondaryColor,
                 size: 28,
               ),
             )),
             Expanded(
-                flex: 4,
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 18, color: AppColors.primaryColor),
-                ))
+              flex: 4,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: getTextColor(themeController.isDarkMode.value),
+                ).merge(GoogleFonts.josefinSans()),
+              ),
+            )
           ],
         ),
       ),

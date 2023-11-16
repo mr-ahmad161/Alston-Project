@@ -2,20 +2,30 @@
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
+import '../utils/appcolors.dart';
+import '../utils/theme_controller.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 
 class CheckListWidget extends StatefulWidget {
+  final ThemeController themeController;
   final String question;
   final Function(bool) onOptionSelected;
+  final double width; // Add a width parameter
 
-  const CheckListWidget({
-    super.key,
+  CheckListWidget({
+    Key? key,
+    required this.themeController,
     required this.question,
     required this.onOptionSelected,
-  });
+    this.width = 200, // Set a default width or you can omit it if you want
+  }) : super(key: key);
 
   @override
   _CheckListWidgetState createState() => _CheckListWidgetState();
 }
+
 
 class _CheckListWidgetState extends State<CheckListWidget> {
   bool isCorrectSelected = false;
@@ -31,55 +41,62 @@ class _CheckListWidgetState extends State<CheckListWidget> {
     double iconSize = screenWidth * 0.075; // e.g., 7.5% of screen width
     double spaceBetween = screenHeight * 0.02; // e.g., 2% of screen height
 
-    return Card(
-      margin: EdgeInsets.all(screenWidth * 0.02), // e.g., 2% of screen width
-      elevation: 8,
-      color: Colors.blue, // Replace with your color: AppColors.primaryColor,
-      child: Padding(
-        padding: EdgeInsets.all(screenWidth * 0.04), // e.g., 4% of screen width
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              widget.question,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: screenWidth * 0.045), // Dynamically sized text
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: spaceBetween),
-            Row(
+    return Obx(() {
+      return SizedBox(
+        // height: screenWidth * 0.3,
+        width: 100, // Adjust the width as needed
+        child: Card(
+          margin: EdgeInsets.only(left: screenWidth * 0.04, right: screenWidth * 0.04, top: screenWidth * 0.03, bottom: screenWidth * 0.03 ),
+          elevation: 1,
+          color: widget.themeController.isDarkMode.value
+              ? AppColors.primaryColor
+              : AppColors.backgroundColors,
+          child: Padding(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildIcon(Icons.check, isCorrectSelected, Colors.orangeAccent,
-                    () {
-                  setState(() {
-                    isCorrectSelected = !isCorrectSelected;
-                    isWrongSelected = false;
-                    widget.onOptionSelected(isCorrectSelected);
-                  });
-                }, iconSize),
-                SizedBox(width: spaceBetween),
-                _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
-                  setState(() {
-                    isWrongSelected = !isWrongSelected;
-                    isCorrectSelected = false;
-                    widget.onOptionSelected(!isWrongSelected);
-                  });
-                }, iconSize),
-                SizedBox(width: spaceBetween),
-                _buildIcon(Icons.image, false, Colors.white,
-                    _showImageSourceDialog, iconSize),
-                SizedBox(width: spaceBetween),
-                _buildIcon(Icons.edit_note, false, Colors.white,
-                    _showInputDialog, iconSize),
+                Text(
+                  widget.question,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth * 0.045,
+                  ).merge(GoogleFonts.josefinSans()),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: spaceBetween),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _buildIcon(Icons.check, isCorrectSelected, Colors.green, () {
+                      setState(() {
+                        isCorrectSelected = !isCorrectSelected;
+                        isWrongSelected = false;
+                        widget.onOptionSelected(isCorrectSelected);
+                      });
+                    }, iconSize),
+                    SizedBox(width: spaceBetween),
+                    _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
+                      setState(() {
+                        isWrongSelected = !isWrongSelected;
+                        isCorrectSelected = false;
+                        widget.onOptionSelected(!isWrongSelected);
+                      });
+                    }, iconSize),
+                    SizedBox(width: spaceBetween),
+                    _buildIcon(Icons.image, false, Colors.white, _showImageSourceDialog, iconSize),
+                    SizedBox(width: spaceBetween),
+                    _buildIcon(Icons.edit_note, false, Colors.white, _showInputDialog, iconSize),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
+
 
   Widget _buildIcon(IconData icon, bool isSelected, Color color,
       VoidCallback onTap, double size) {

@@ -50,8 +50,8 @@ class NotConfirmBusScreen extends StatelessWidget {
                   'Call The Dispatcher and Inform You are in the Wrong bus, Ask to Verify',
                   style: TextStyle(
                     color: themeController.isDarkMode.value
-                        ? AppColors.primaryColorDark // Dark theme text color
-                        : AppColors.textColor, // Light theme text color
+                        ? AppColors.backgroundColor // Dark theme text color
+                        : AppColors.primaryColor, // Light theme text color
                     fontSize: fontSize,
                   ),
                   textAlign: TextAlign.center,
@@ -59,6 +59,12 @@ class NotConfirmBusScreen extends StatelessWidget {
                 SizedBox(height: verticalSpacingSmall),
                 CustomElevatedButton(
                   buttonText: 'Ok',
+                  buttonColor: themeController.isDarkMode.value
+                      ? AppColors.primaryColorDarker
+                      : AppColors.primaryColor,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   onPressed: () {
                     Get.to(() =>
                         SignInScreen()); // Make sure to construct a new SignInScreen

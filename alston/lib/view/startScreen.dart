@@ -70,6 +70,12 @@ class StartScreen extends StatelessWidget {
                 SizedBox(height: spaceBeforeButton),
                 CustomElevatedButton(
                   buttonText: 'Start',
+                  buttonColor: themeController.isDarkMode.value
+                      ? AppColors.primaryColorDarker
+                      : AppColors.primaryColor,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   onPressed: () {
                     Get.offAll(() => SignInScreen());
                   },

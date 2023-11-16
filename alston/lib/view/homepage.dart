@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:alston/utils/theme_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:alston/widgets/customelevatedbutton.dart';
 import 'package:alston/widgets/navigationdrawer.dart';
@@ -21,9 +22,9 @@ class HomePage extends StatelessWidget {
     final screenWidth = screenSize.width;
     final double sidePadding = screenWidth * 0.05;
     final double verticalSpacing = screenHeight * 0.02;
-    final double fontSize = screenHeight * 0.025;
+    final double fontSize = screenHeight * 0.03;
 
-    return Scaffold(
+    return Obx(() => Scaffold(
       drawer: Drawer(
         child: SingleChildScrollView(
           child: Column(
@@ -36,15 +37,20 @@ class HomePage extends StatelessWidget {
       ),
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
-          'ALSTON Link',
-          style: GoogleFonts.acme(),
-        ),
+        title: Text('ALSTON', style: GoogleFonts.lato()),
+        backgroundColor: themeController.isDarkMode.value
+            ? AppColors.primaryColor
+            : AppColors.backgroundColors,
         actions: [
           IconButton(
-            icon: Icon(themeController.isDarkMode.value
-                ? Icons.light_mode // Icon for light mode
-                : Icons.dark_mode), // Icon for dark mode
+            icon: Icon(
+              themeController.isDarkMode.value
+                  ? Icons.light_mode
+                  : Icons.dark_mode,
+              color: themeController.isDarkMode.value
+                  ? AppColors.darkModeIcon
+                  : AppColors.primaryColor,
+            ),
             onPressed: () {
               // Toggle the theme
               themeController.toggleTheme(!themeController.isDarkMode.value);
@@ -52,52 +58,52 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(() => Container(
-            padding: EdgeInsets.symmetric(horizontal: sidePadding),
-            color: themeController.isDarkMode.value
-                ? AppColors.backgroundColorDarker
-                : AppColors.backgroundColor,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Have you Done The Pre-Start Today?',
-                  style: TextStyle(
-                    color: themeController.isDarkMode.value
-                        ? AppColors.textColorDarker
-                        : AppColors.textColor,
-                    fontSize: fontSize,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.075),
-                CustomElevatedButton(
-                  buttonText: 'Pre-Start',
-                  buttonColor: themeController.isDarkMode.value
-                      ? AppColors.primaryColorDarker
-                      : AppColors.primaryColor,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.whiteColor
-                      : AppColors.textColor,
-                  onPressed: () {
-                    Get.to(() => PreStartCheckList());
-                  },
-                ),
-                SizedBox(height: verticalSpacing),
-                CustomElevatedButton(
-                  buttonText: 'SKIP',
-                  buttonColor: themeController.isDarkMode.value
-                      ? AppColors.backgroundColorsDarker
-                      : Colors.grey,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.textColor
-                      : AppColors.textColorDarker,
-                  onPressed: () {
-                    Get.to(() => const MyBooking());
-                  },
-                ),
-              ],
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: sidePadding),
+        color: themeController.isDarkMode.value
+            ? AppColors.backgroundColorDarker
+            : AppColors.backgroundColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Have you Done The Pre-Start Today?',
+              style: TextStyle(
+                color: themeController.isDarkMode.value
+                    ? AppColors.whiteColor
+                    : AppColors.textColor,
+                fontSize: fontSize,
+              ).merge(GoogleFonts.josefinSans()),
+              textAlign: TextAlign.center,
             ),
-          )),
-    );
-  }
-}
+            SizedBox(height: screenHeight * 0.075),
+            CustomElevatedButton(
+              buttonText: 'Pre-Start',
+              buttonColor: themeController.isDarkMode.value
+                  ? AppColors.primaryColorDarker
+                  : AppColors.primaryColor,
+              textColor: themeController.isDarkMode.value
+                  ? AppColors.whiteColor
+                  : AppColors.whiteColor,
+              onPressed: () {
+                Get.to(() => PreStartCheckList());
+              },
+            ),
+            SizedBox(height: verticalSpacing),
+            CustomElevatedButton(
+              buttonText: 'SKIP',
+              buttonColor: themeController.isDarkMode.value
+                  ? AppColors.backgroundColorDarker
+                  : Colors.grey,
+              textColor: themeController.isDarkMode.value
+                  ? AppColors.whiteColor
+                  : AppColors.whiteColor,
+              onPressed: () {
+                Get.to(() => const MyBooking());
+              },
+            ),
+          ],
+        ),
+      ),
+    ));
+  }}

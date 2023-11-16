@@ -52,7 +52,26 @@ class PreStartCheckList extends StatelessWidget {
         ),
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Pre-Start Checklist', style: GoogleFonts.acme()),
+          title: Text('Pre-Start Checklist', style: GoogleFonts.lato()),
+            backgroundColor: themeController.isDarkMode.value
+                ? AppColors.primaryColor
+                : AppColors.backgroundColors,
+          actions: [
+            IconButton(
+              icon: Icon(
+                themeController.isDarkMode.value
+                    ? Icons.light_mode // Icon for light mode
+                    : Icons.dark_mode, // Icon for dark mode
+                color: themeController.isDarkMode.value
+                    ? AppColors.darkModeIcon
+                    : AppColors.primaryColor, // Icon color in light mode
+              ),
+              onPressed: () {
+                // Toggle the theme
+                themeController.toggleTheme(!themeController.isDarkMode.value);
+              },
+            ),
+          ],
         ),
         body: Container(
           padding: EdgeInsets.symmetric(
@@ -71,12 +90,16 @@ class PreStartCheckList extends StatelessWidget {
                   CenterTextPair(
                       text: 'Driver Name : ',
                       value: 'Imax Melbourne',
-                      textColor: textColor),
+                    textColor: themeController.isDarkMode.value
+                        ? AppColors.whiteColor
+                        : AppColors.textColor,),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   CenterTextPair(
                       text: 'Bus Number : ',
                       value: 'BS04HW',
-                      textColor: textColor),
+                    textColor: themeController.isDarkMode.value
+                        ? AppColors.whiteColor
+                        : AppColors.textColor,),
                   SizedBox(
                       height: MediaQuery.of(context).size.height * 0.02 * 2),
                   CustomTextFormField(
@@ -111,7 +134,7 @@ class PreStartCheckList extends StatelessWidget {
                         : AppColors.primaryColor,
                     textColor: themeController.isDarkMode.value
                         ? AppColors.whiteColor
-                        : AppColors.textColor,
+                        : AppColors.whiteColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         // Navigate to the next screen
@@ -154,7 +177,7 @@ class CenterTextPair extends StatelessWidget {
             color: textColor,
             fontSize: MediaQuery.of(context).size.width * 0.045,
             fontWeight: FontWeight.w100,
-          ),
+          ).merge(GoogleFonts.josefinSans()),
         ),
         Text(
           value,

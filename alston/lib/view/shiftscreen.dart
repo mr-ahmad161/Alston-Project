@@ -44,43 +44,100 @@ class ShiftScreen extends StatelessWidget {
             centerTitle: true,
             title: Text(
               'SHIFT REPORT',
-              style: GoogleFonts.acme(),
+              style: GoogleFonts.lato(),
+
             ),
             bottom: TabBar(
-              unselectedLabelColor: textColor,
-              indicatorColor: primaryColor,
-              tabs: const <Widget>[
-                Tab(
-                  icon: Icon(Icons.today),
-                  text: 'Today',
+              unselectedLabelColor: AppColors.whiteColor,
+              indicatorColor: themeController.isDarkMode.value
+                  ? AppColors.backgroundColors
+                  : AppColors.primaryColor,
+              tabs:  <Widget>[
+                DefaultTextStyle(
+                  style: GoogleFonts.josefinSans(
+
+                    textStyle: TextStyle(
+                      // Customize the font style here
+                      fontSize: 16.0,
+                      color: AppColors.whiteColor,
+                      fontWeight: FontWeight.w400,
+                      // Other text style properties...
+                    ),
+                  ),
+                  child: Tab(
+                    icon: Icon(Icons.today),
+                    text: 'Today',
+                  ),
                 ),
-                Tab(
-                  icon: Icon(Icons.calendar_view_week),
-                  text: 'This Week',
+                DefaultTextStyle(
+                  style: GoogleFonts.josefinSans(
+
+                    textStyle: TextStyle(
+                      // Customize the font style here
+                      fontSize: 16.0,
+                      color: AppColors.whiteColor,
+                      fontWeight: FontWeight.w400,
+                      // Other text style properties...
+                    ),
+                  ),
+                  child: Tab(
+                    icon: Icon(Icons.today),
+                    text: 'This Week',
+                  ),
                 ),
-                Tab(
-                  icon: Icon(Icons.calendar_month),
-                  text: 'This Month',
+                DefaultTextStyle(
+                  style: GoogleFonts.josefinSans(
+
+                    textStyle: TextStyle(
+                      // Customize the font style here
+                      fontSize: 16.0,
+                      color: AppColors.whiteColor,
+                      fontWeight: FontWeight.w400,
+                      // Other text style properties...
+                    ),
+                  ),
+                  child: Tab(
+                    icon: Icon(Icons.today),
+                    text: 'This Month',
+                  ),
                 ),
               ],
             ),
+            backgroundColor: themeController.isDarkMode.value
+                ? AppColors.primaryColor
+                : AppColors.backgroundColors,
+            actions: [
+              IconButton(
+                icon: Icon(
+                  themeController.isDarkMode.value
+                      ? Icons.light_mode // Icon for light mode
+                      : Icons.dark_mode, // Icon for dark mode
+                  color: themeController.isDarkMode.value
+                      ? AppColors.darkModeIcon
+                      : AppColors.primaryColor, // Icon color in light mode
+                ),
+                onPressed: () {
+                  // Toggle the theme
+                  themeController.toggleTheme(!themeController.isDarkMode.value);
+                },
+              ),
+            ],
           ),
           body: TabBarView(
             children: <Widget>[
-              buildTabContext('Today You don\'t have any\nreport',
-                  backgroundColor, textColor),
-              buildTabContext('This Week You don\'t have\nany report',
-                  backgroundColor, textColor),
-              buildTabContext('This Month You don\'t have\nany report',
-                  backgroundColor, textColor),
+              buildTabContext('Today You don\'t have any\nreport', backgroundColor, textColor, themeController),
+              buildTabContext('This Week You don\'t have\nany report', backgroundColor, textColor, themeController),
+              buildTabContext('This Month You don\'t have\nany report', backgroundColor, textColor, themeController),
             ],
           ),
+
         ),
       );
     });
   }
 
-  Widget buildTabContext(String text, Color backgroundColor, Color textColor) {
+  Widget buildTabContext(
+      String text, Color backgroundColor, Color textColor, ThemeController themeController) {
     return Center(
       child: Container(
         alignment: Alignment.center,
@@ -88,12 +145,15 @@ class ShiftScreen extends StatelessWidget {
         child: Text(
           text,
           style: TextStyle(
-            color: textColor,
+            color: themeController.isDarkMode.value
+                ? AppColors.whiteColor
+                : AppColors.textColor,
             fontSize: 18, // Adjust the font size as needed
-          ),
+          ).merge(GoogleFonts.josefinSans()),
           textAlign: TextAlign.center,
         ),
       ),
     );
   }
+
 }

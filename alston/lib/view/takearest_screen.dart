@@ -5,6 +5,7 @@ import 'package:alston/view/homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../utils/appcolors.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../utils/theme_controller.dart';
 import '../widgets/customelevatedbutton.dart';
 import '../widgets/customtextformfield.dart';
@@ -21,7 +22,7 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _locationName = TextEditingController();
   final TextEditingController _odometer = TextEditingController();
-
+  final ThemeController themeController = Get.find<ThemeController>();
   late String _buttonText = 'Start Resting';
   late bool _isRunning = false;
   Timer? _timer;
@@ -77,7 +78,7 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       drawer: Drawer(
-        child: SingleChildScrollView(
+        child: Container(
           child: Column(
             children: [
               const MyDrawerHeader(),
@@ -87,8 +88,13 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
         ),
       ),
       appBar: AppBar(
-        title: const Text('TAKE A REST'),
+        title: Text('TAKE A REST',
+            style: GoogleFonts.lato()
+        ),
         centerTitle: true,
+        backgroundColor: themeController.isDarkMode.value
+            ? AppColors.primaryColor
+            : AppColors.backgroundColors,
         actions: const [
           Padding(
             padding: EdgeInsets.all(8.0),
@@ -96,8 +102,11 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
         padding: EdgeInsets.all(mediaQuery.size.width * 0.05),
+        color: themeController.isDarkMode.value
+            ? AppColors.backgroundColorDarker
+            : AppColors.backgroundColor,
         child: Form(
           key: _formKey,
           child: Obx(() {
@@ -119,8 +128,10 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: mediaQuery.size.width * 0.05,
-                    color: textColor, // Set the dynamic color
-                  ),
+                    color: themeController.isDarkMode.value
+                        ? AppColors.backgroundColor
+                        : AppColors.backgroundColorDarker, // Set the dynamic color
+                  ).merge(GoogleFonts.josefinSans()),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: mediaQuery.size.height * 0.05),
@@ -147,9 +158,24 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
                     return null;
                   },
                 ),
+
+                SizedBox(height: mediaQuery.size.height * 0.05),
+                Text(
+                  _formatTime(_elapsedSeconds),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: mediaQuery.size.width * 0.1, // Assuming you have a digital font
+                  ).merge(GoogleFonts.josefinSans()),
+                ),
                 SizedBox(height: mediaQuery.size.height * 0.05),
                 CustomElevatedButton(
                   buttonText: _buttonText,
+                  buttonColor: themeController.isDarkMode.value
+                      ? AppColors.primaryColorDark
+                      : AppColors.primaryColor,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       _toggleTimer();
@@ -157,17 +183,13 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
                   },
                 ),
                 SizedBox(height: mediaQuery.size.height * 0.05),
-                Text(
-                  _formatTime(_elapsedSeconds),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: mediaQuery.size.width * 0.1,
-                    fontFamily: 'Digital', // Assuming you have a digital font
-                  ),
-                ),
-                SizedBox(height: mediaQuery.size.height * 0.05),
                 CustomElevatedButton(
-                  buttonColor: Colors.grey,
+                  buttonColor: themeController.isDarkMode.value
+                      ? Colors.grey
+                      : Colors.grey,
+                  textColor: themeController.isDarkMode.value
+                      ? AppColors.whiteColor
+                      : AppColors.whiteColor,
                   buttonText: 'Cancel',
                   onPressed: () {
                     resetAndGoHome();
