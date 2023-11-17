@@ -12,7 +12,6 @@ class CheckListWidget extends StatefulWidget {
   final String question;
   final Function(bool) onOptionSelected;
   final double width; // Add a width parameter
-
   const CheckListWidget({
     Key? key,
     required this.themeController,
@@ -41,8 +40,8 @@ class _CheckListWidgetState extends State<CheckListWidget> {
 
     return Obx(() {
       return SizedBox(
-        width: 400,
-        height: 300,
+        width: screenWidth * 0.8,
+        height: screenHeight * 0.8,
         child: Card(
           elevation: 1,
           shape: RoundedRectangleBorder(
@@ -51,45 +50,52 @@ class _CheckListWidgetState extends State<CheckListWidget> {
           color: widget.themeController.isDarkMode.value
               ? AppColors.primaryColor
               : AppColors.backgroundColors,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                widget.question,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: screenWidth * 0.045,
-                ).merge(GoogleFonts.josefinSans()),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: spaceBetween),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildIcon(Icons.check, isCorrectSelected, Colors.green, () {
-                    setState(() {
-                      isCorrectSelected = !isCorrectSelected;
-                      isWrongSelected = false;
-                      widget.onOptionSelected(isCorrectSelected);
-                    });
-                  }, iconSize),
-                  SizedBox(width: spaceBetween),
-                  _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
-                    setState(() {
-                      isWrongSelected = !isWrongSelected;
-                      isCorrectSelected = false;
-                      widget.onOptionSelected(!isWrongSelected);
-                    });
-                  }, iconSize),
-                  SizedBox(width: spaceBetween),
-                  _buildIcon(Icons.image, false, Colors.white,
-                      _showImageSourceDialog, iconSize),
-                  SizedBox(width: spaceBetween),
-                  _buildIcon(Icons.edit_note, false, Colors.white,
-                      _showInputDialog, iconSize),
-                ],
-              ),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  widget.question,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth * 0.06,
+                  ).merge(GoogleFonts.josefinSans()),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: spaceBetween),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildIcon(Icons.check, isCorrectSelected, Colors.green, () {
+                        setState(() {
+                          isCorrectSelected = !isCorrectSelected;
+                          isWrongSelected = false;
+                          widget.onOptionSelected(isCorrectSelected);
+                        });
+                      }, iconSize),
+                      SizedBox(width: spaceBetween),
+                      _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
+                        setState(() {
+                          isWrongSelected = !isWrongSelected;
+                          isCorrectSelected = false;
+                          widget.onOptionSelected(!isWrongSelected);
+                        });
+                      }, iconSize),
+                      SizedBox(width: spaceBetween),
+                      _buildIcon(Icons.image, false, Colors.white,
+                          _showImageSourceDialog, iconSize),
+                      SizedBox(width: spaceBetween),
+                      _buildIcon(Icons.edit_note, false, Colors.white,
+                          _showInputDialog, iconSize),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );
