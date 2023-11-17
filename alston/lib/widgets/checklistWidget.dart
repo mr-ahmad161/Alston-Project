@@ -51,32 +51,43 @@ class _CheckListWidgetState extends State<CheckListWidget> {
               ? AppColors.primaryColor
               : AppColors.backgroundColors,
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(
+              top: screenWidth * 0.1,
+              left: screenWidth * 0.03,
+              right: screenWidth * 0.02,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   widget.question,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: screenWidth * 0.06,
+                    fontSize: screenWidth * 0.04,
                   ).merge(GoogleFonts.josefinSans()),
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.left,
                 ),
-                SizedBox(height: spaceBetween),
+                SizedBox(height: screenHeight * 0.04),
+                const Text("Please Submit the  Following :",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 23,
+                    )),
+                SizedBox(height: screenHeight * 0.04),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildIcon(Icons.check, isCorrectSelected, Colors.green, () {
+                      _buildIcon(Icons.check, isCorrectSelected, Colors.green,
+                          () {
                         setState(() {
                           isCorrectSelected = !isCorrectSelected;
                           isWrongSelected = false;
                           widget.onOptionSelected(isCorrectSelected);
                         });
-                      }, iconSize),
+                      }, iconSize, "Yes"),
                       SizedBox(width: spaceBetween),
                       _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
                         setState(() {
@@ -84,13 +95,13 @@ class _CheckListWidgetState extends State<CheckListWidget> {
                           isCorrectSelected = false;
                           widget.onOptionSelected(!isWrongSelected);
                         });
-                      }, iconSize),
+                      }, iconSize, "No"),
                       SizedBox(width: spaceBetween),
                       _buildIcon(Icons.image, false, Colors.white,
-                          _showImageSourceDialog, iconSize),
+                          _showImageSourceDialog, iconSize, "Upload a Image"),
                       SizedBox(width: spaceBetween),
                       _buildIcon(Icons.edit_note, false, Colors.white,
-                          _showInputDialog, iconSize),
+                          _showInputDialog, iconSize, "Ask a Question"),
                     ],
                   ),
                 ),
@@ -103,10 +114,27 @@ class _CheckListWidgetState extends State<CheckListWidget> {
   }
 
   Widget _buildIcon(IconData icon, bool isSelected, Color color,
-      VoidCallback onTap, double size) {
+      VoidCallback onTap, double size, String text) {
     return GestureDetector(
       onTap: onTap,
-      child: Icon(icon, color: isSelected ? color : Colors.white, size: size),
+      child: Column(
+        children: [
+          Row(
+            children: <Widget>[
+              Icon(icon, color: isSelected ? color : Colors.white, size: size),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.05,
+              ), // Space between icon and text
+              Text(text,
+                  style: TextStyle(
+                      color: isSelected ? color : Colors.white, fontSize: 20)),
+            ],
+          ),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.01,
+          )
+        ],
+      ),
     );
   }
 

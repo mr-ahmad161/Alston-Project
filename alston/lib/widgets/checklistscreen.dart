@@ -80,7 +80,7 @@ class CheckList extends StatelessWidget {
             ),
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
               child: CustomElevatedButton(
                 buttonText: 'Submit Checklist',
                 buttonColor: themeController.isDarkMode.value
@@ -96,40 +96,3 @@ class CheckList extends StatelessWidget {
         )));
   }
 }
-
-
-        //   ListView.builder(
-        //     scrollDirection: Axis.horizontal,
-        //     itemCount:
-        //         questionList.length + 1, // Add one for the button at the end
-        //     itemBuilder: (context, index) {
-        //       if (index < questionList.length) {
-        //         // Return a checklist widget for each question item
-        //         return CheckListWidget(
-        //           themeController: themeController, // Pass the themeController
-        //           question: questionList[index],
-        //           onOptionSelected: (bool isCorrect) {
-        //             // Handle the selected option here
-        //           },
-        //           width: 20, // Set the desired width
-        //         );
-        //       } else {
-        //         // Return a button for the last item
-        //         return Padding(
-        //           padding: const EdgeInsets.symmetric(
-        //               vertical: 20.0, horizontal: 16.0),
-        //           child: CustomElevatedButton(
-        //               buttonText: 'Submit Checklist',
-        //               buttonColor: themeController.isDarkMode.value
-        //                   ? AppColors.primaryColorDarker
-        //                   : AppColors.primaryColor,
-        //               textColor: themeController.isDarkMode.value
-        //                   ? AppColors.whiteColor
-        //                   : AppColors.whiteColor,
-        //               onPressed: () {}),
-        //         );
-        //       }
-        //     },
-        //   ),
-        // ));
-  
