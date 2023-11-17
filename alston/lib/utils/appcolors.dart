@@ -10,7 +10,7 @@ class AppColors {
   static const Color backgroundColors = Color(0xFF8DB2CF);
   static const Color whiteColor = Color(0xFFF1F2F4);
   static const Color messageColor = Color(0xFFfdbb2d);
-  static LinearGradient buttonBackgroundLight = LinearGradient(
+  static LinearGradient buttonBackgroundLight = const LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
     stops: [0.0, 0.35, 1.0],
@@ -20,7 +20,7 @@ class AppColors {
       Color.fromRGBO(50, 96, 122, 0.8784313725490196),
     ],
   );
-  static LinearGradient buttonBackgroundDark = LinearGradient(
+  static LinearGradient buttonBackgroundDark = const LinearGradient(
     begin: Alignment.centerRight,
     end: Alignment.centerLeft, // Adjusted the stop value for the middle color
     colors: [

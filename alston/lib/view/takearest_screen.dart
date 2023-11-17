@@ -88,9 +88,7 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
         ),
       ),
       appBar: AppBar(
-        title: Text('TAKE A REST',
-            style: GoogleFonts.lato()
-        ),
+        title: Text('TAKE A REST', style: GoogleFonts.lato()),
         centerTitle: true,
         backgroundColor: themeController.isDarkMode.value
             ? AppColors.primaryColor
@@ -102,102 +100,106 @@ class _TakeARestScreenState extends State<TakeARestScreen> {
           ),
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.all(mediaQuery.size.width * 0.05),
-        color: themeController.isDarkMode.value
-            ? AppColors.backgroundColorDarker
-            : AppColors.backgroundColor,
-        child: Form(
-          key: _formKey,
-          child: Obx(() {
-            // Retrieve the ThemeController
-            final ThemeController themeController = Get.find<ThemeController>();
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(mediaQuery.size.width * 0.05),
+          color: themeController.isDarkMode.value
+              ? AppColors.backgroundColorDarker
+              : AppColors.backgroundColor,
+          child: Form(
+            key: _formKey,
+            child: Obx(() {
+              // Retrieve the ThemeController
+              final ThemeController themeController =
+                  Get.find<ThemeController>();
 
-            // Colors are chosen based on the theme status
-            Color textColor = themeController.isDarkMode.value
-                ? AppColors.textColor
-                : AppColors.textColorDarker;
+              // Colors are chosen based on the theme status
+              Color textColor = themeController.isDarkMode.value
+                  ? AppColors.textColor
+                  : AppColors.textColorDarker;
 
-            return Column(
-              children: <Widget>[
-                SizedBox(
-                  height: mediaQuery.size.height * 0.1,
-                ),
-                Text(
-                  'You Are Operating Bus BS04HW',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: mediaQuery.size.width * 0.05,
-                    color: themeController.isDarkMode.value
-                        ? AppColors.backgroundColor
-                        : AppColors.backgroundColorDarker, // Set the dynamic color
-                  ).merge(GoogleFonts.josefinSans()),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: mediaQuery.size.height * 0.05),
-                CustomTextFormField(
-                  labelText: 'Enter Odometer Reading, Km',
-                  obscureText: false,
-                  controller: _odometer,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Odometer reading cannot be empty";
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: mediaQuery.size.height * 0.02),
-                CustomTextFormField(
-                  labelText: 'Enter Resting Location',
-                  obscureText: false,
-                  controller: _locationName,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Location cannot be empty";
-                    }
-                    return null;
-                  },
-                ),
-
-                SizedBox(height: mediaQuery.size.height * 0.05),
-                Text(
-                  _formatTime(_elapsedSeconds),
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: mediaQuery.size.width * 0.1, // Assuming you have a digital font
-                  ).merge(GoogleFonts.josefinSans()),
-                ),
-                SizedBox(height: mediaQuery.size.height * 0.05),
-                CustomElevatedButton(
-                  buttonText: _buttonText,
-                  buttonColor: themeController.isDarkMode.value
-                      ? AppColors.primaryColorDark
-                      : AppColors.primaryColor,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.whiteColor
-                      : AppColors.whiteColor,
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _toggleTimer();
-                    }
-                  },
-                ),
-                SizedBox(height: mediaQuery.size.height * 0.05),
-                CustomElevatedButton(
-                  buttonColor: themeController.isDarkMode.value
-                      ? Colors.grey
-                      : Colors.grey,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.whiteColor
-                      : AppColors.whiteColor,
-                  buttonText: 'Cancel',
-                  onPressed: () {
-                    resetAndGoHome();
-                  },
-                ),
-              ],
-            );
-          }),
+              return Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: mediaQuery.size.height * 0.1,
+                  ),
+                  Text(
+                    'You Are Operating Bus BS04HW',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: mediaQuery.size.width * 0.05,
+                      color: themeController.isDarkMode.value
+                          ? AppColors.backgroundColor
+                          : AppColors
+                              .backgroundColorDarker, // Set the dynamic color
+                    ).merge(GoogleFonts.josefinSans()),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: mediaQuery.size.height * 0.05),
+                  CustomTextFormField(
+                    labelText: 'Enter Odometer Reading, Km',
+                    obscureText: false,
+                    controller: _odometer,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Odometer reading cannot be empty";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: mediaQuery.size.height * 0.02),
+                  CustomTextFormField(
+                    labelText: 'Enter Resting Location',
+                    obscureText: false,
+                    controller: _locationName,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return "Location cannot be empty";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: mediaQuery.size.height * 0.05),
+                  Text(
+                    _formatTime(_elapsedSeconds),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: mediaQuery.size.width *
+                          0.1, // Assuming you have a digital font
+                    ).merge(GoogleFonts.josefinSans()),
+                  ),
+                  SizedBox(height: mediaQuery.size.height * 0.05),
+                  CustomElevatedButton(
+                    buttonText: _buttonText,
+                    buttonColor: themeController.isDarkMode.value
+                        ? AppColors.primaryColorDark
+                        : AppColors.primaryColor,
+                    textColor: themeController.isDarkMode.value
+                        ? AppColors.whiteColor
+                        : AppColors.whiteColor,
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _toggleTimer();
+                      }
+                    },
+                  ),
+                  SizedBox(height: mediaQuery.size.height * 0.05),
+                  CustomElevatedButton(
+                    buttonColor: themeController.isDarkMode.value
+                        ? Colors.grey
+                        : Colors.grey,
+                    textColor: themeController.isDarkMode.value
+                        ? AppColors.whiteColor
+                        : AppColors.whiteColor,
+                    buttonText: 'Cancel',
+                    onPressed: () {
+                      resetAndGoHome();
+                    },
+                  ),
+                ],
+              );
+            }),
+          ),
         ),
       ),
     );

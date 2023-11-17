@@ -10,7 +10,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool obscureText;
   final ThemeController themeController = Get.find<ThemeController>();
-   CustomTextFormField({
+  CustomTextFormField({
     super.key,
     required this.labelText,
     required this.controller,
@@ -23,7 +23,7 @@ class CustomTextFormField extends StatelessWidget {
     final screenHeight = screenSize.height;
     final double fontSize = screenHeight * 0.02;
 
-    return Container(
+    return SizedBox(
       height: 60.0, // Set your desired height
       child: TextFormField(
         cursorColor: AppColors.primaryColorDark,
@@ -31,14 +31,14 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscureText,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
+          contentPadding: const EdgeInsets.symmetric(
             vertical: 15.0, // Adjust the vertical padding
             horizontal: 20.0, // Adjust the horizontal padding
           ),
           filled: true,
           hintMaxLines: 1,
           labelText: labelText,
-          hintStyle: TextStyle(
+          hintStyle: const TextStyle(
             fontSize: 12.0, // Set your desired font size for the placeholder
             color: Colors.grey, // Set your desired color for the placeholder
           ),
@@ -77,7 +77,6 @@ class CustomTextFormField extends StatelessWidget {
                   : AppColors.primaryColor,
               fontSize: fontSize,
             ),
-
           ),
         ),
         controller: controller,
@@ -85,5 +84,4 @@ class CustomTextFormField extends StatelessWidget {
       ),
     );
   }
-
 }

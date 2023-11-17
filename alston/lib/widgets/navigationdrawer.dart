@@ -18,10 +18,10 @@ class MyDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ThemeController themeController = Get.find<ThemeController>();
-    return Obx(() =>  Container(
+    return Obx(() => Container(
         width: double.infinity,
         height: 245,
-        color:  themeController.isDarkMode.value
+        color: themeController.isDarkMode.value
             ? AppColors.primaryColor
             : AppColors.backgroundColors,
         padding: const EdgeInsets.only(left: 15, bottom: 20),
@@ -29,23 +29,24 @@ class MyDrawerHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
-            CircleAvatar(
+            const CircleAvatar(
                 maxRadius: 50,
                 backgroundImage: AssetImage('assets/images/user.png')),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             Text(
               'Imax Melbourne',
               style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: themeController.isDarkMode.value
-                      ? AppColors.backgroundColor
-                      : AppColors.secondaryColor,
-                  fontSize: 20).merge(GoogleFonts.lato()),
+                      fontWeight: FontWeight.bold,
+                      color: themeController.isDarkMode.value
+                          ? AppColors.backgroundColor
+                          : AppColors.secondaryColor,
+                      fontSize: 20)
+                  .merge(GoogleFonts.lato()),
             ),
           ],
         )));
@@ -77,7 +78,7 @@ Widget myDrawerList() {
       manuItem(
           'End Shift', Icons.lock, () => Get.offAll(const EndShiftScreen())),
       const Divider(thickness: 1, height: 1),
-      manuItem('Logout', Icons.logout, ()  => Get.offAll( SignInScreen())),
+      manuItem('Logout ', Icons.logout, () => Get.offAll(SignInScreen())),
     ],
   );
 }
@@ -87,6 +88,7 @@ Widget manuItem(String title, IconData? icon, Function()? onPressed) {
   Color getTextColor(bool isDarkMode) {
     return isDarkMode ? AppColors.backgroundColor : AppColors.secondaryColor;
   }
+
   return Material(
     child: InkWell(
       onTap: onPressed,

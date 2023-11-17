@@ -45,18 +45,16 @@ class ShiftScreen extends StatelessWidget {
             title: Text(
               'SHIFT REPORT',
               style: GoogleFonts.lato(),
-
             ),
             bottom: TabBar(
               unselectedLabelColor: AppColors.whiteColor,
               indicatorColor: themeController.isDarkMode.value
                   ? AppColors.backgroundColors
                   : AppColors.primaryColor,
-              tabs:  <Widget>[
+              tabs: <Widget>[
                 DefaultTextStyle(
                   style: GoogleFonts.josefinSans(
-
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       // Customize the font style here
                       fontSize: 16.0,
                       color: AppColors.whiteColor,
@@ -64,15 +62,14 @@ class ShiftScreen extends StatelessWidget {
                       // Other text style properties...
                     ),
                   ),
-                  child: Tab(
+                  child: const Tab(
                     icon: Icon(Icons.today),
                     text: 'Today',
                   ),
                 ),
                 DefaultTextStyle(
                   style: GoogleFonts.josefinSans(
-
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       // Customize the font style here
                       fontSize: 16.0,
                       color: AppColors.whiteColor,
@@ -80,15 +77,14 @@ class ShiftScreen extends StatelessWidget {
                       // Other text style properties...
                     ),
                   ),
-                  child: Tab(
+                  child: const Tab(
                     icon: Icon(Icons.today),
                     text: 'This Week',
                   ),
                 ),
                 DefaultTextStyle(
                   style: GoogleFonts.josefinSans(
-
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       // Customize the font style here
                       fontSize: 16.0,
                       color: AppColors.whiteColor,
@@ -96,7 +92,7 @@ class ShiftScreen extends StatelessWidget {
                       // Other text style properties...
                     ),
                   ),
-                  child: Tab(
+                  child: const Tab(
                     icon: Icon(Icons.today),
                     text: 'This Month',
                   ),
@@ -118,26 +114,29 @@ class ShiftScreen extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Toggle the theme
-                  themeController.toggleTheme(!themeController.isDarkMode.value);
+                  themeController
+                      .toggleTheme(!themeController.isDarkMode.value);
                 },
               ),
             ],
           ),
           body: TabBarView(
             children: <Widget>[
-              buildTabContext('Today You don\'t have any\nreport', backgroundColor, textColor, themeController),
-              buildTabContext('This Week You don\'t have\nany report', backgroundColor, textColor, themeController),
-              buildTabContext('This Month You don\'t have\nany report', backgroundColor, textColor, themeController),
+              buildTabContext('Today You don\'t have any\nreport',
+                  backgroundColor, textColor, themeController),
+              buildTabContext('This Week You don\'t have\nany report',
+                  backgroundColor, textColor, themeController),
+              buildTabContext('This Month You don\'t have\nany report',
+                  backgroundColor, textColor, themeController),
             ],
           ),
-
         ),
       );
     });
   }
 
-  Widget buildTabContext(
-      String text, Color backgroundColor, Color textColor, ThemeController themeController) {
+  Widget buildTabContext(String text, Color backgroundColor, Color textColor,
+      ThemeController themeController) {
     return Center(
       child: Container(
         alignment: Alignment.center,
@@ -155,5 +154,4 @@ class ShiftScreen extends StatelessWidget {
       ),
     );
   }
-
 }
