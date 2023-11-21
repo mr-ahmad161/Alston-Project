@@ -1,6 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 
-import 'package:alston/model/messageModel.dart';
+import 'package:alston/model/Prestart%20Activity/messageModel.dart';
 import 'package:alston/utils/appcolors.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';

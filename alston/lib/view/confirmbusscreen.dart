@@ -1,17 +1,19 @@
-// ignore_for_file: depend_on_referenced_packages
-
-import 'package:alston/utils/appcolors.dart';
-import 'package:alston/view/homepage.dart';
-import 'package:alston/view/notconfirmbusscreen.dart';
-import 'package:alston/widgets/customelevatedbutton.dart';
-import 'package:alston/widgets/navigationdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../utils/theme_controller.dart'; // Make sure to import your ThemeController
+
+import '../utils/appcolors.dart';
+import '../utils/theme_controller.dart'; // Adjust this import based on your project structure
+import '../view/homepage.dart';
+import '../view/notconfirmbusscreen.dart';
+import '../widgets/customelevatedbutton.dart';
+import '../widgets/navigationdrawer.dart';
 
 class ConfirmBusScreen extends StatelessWidget {
-  const ConfirmBusScreen({Key? key}) : super(key: key);
+  final List<String> busNumbers;
+  String? selectedBusNumber;
+
+  ConfirmBusScreen({Key? key, required this.busNumbers}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ConfirmBusScreen extends StatelessWidget {
     // Define responsive sizes based on screen dimensions
     final horizontalPadding = screenWidth * 0.1;
     final textSizeMedium = screenWidth * 0.05;
-    final textSizeLarge = screenWidth * 0.06;
+    final textSizeLarge = screenWidth * 0.04;
     final blockSpacing = screenHeight * 0.02;
     final buttonSpacing = screenHeight * 0.01;
 
@@ -34,20 +36,17 @@ class ConfirmBusScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const MyDrawerHeader(),
-              myDrawerList(),
+              const MyDrawerHeader(), // Ensure you have this widget defined
+              myDrawerList(), // Ensure you have this function or widget defined
             ],
           ),
         ),
       ),
       body: Obx(() => Container(
-            // Listen to changes in theme
             padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
             color: themeController.isDarkMode.value
-                ? AppColors
-                    .backgroundColorDarker // Use a darker color for dark mode
-                : AppColors
-                    .backgroundColor, // Use a lighter color for light mode
+                ? AppColors.backgroundColorDarker
+                : AppColors.backgroundColor,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -55,25 +54,45 @@ class ConfirmBusScreen extends StatelessWidget {
                   'Are you Sure Operating The Bus With Number',
                   style: TextStyle(
                     color: themeController.isDarkMode.value
-                        ? AppColors.backgroundColor // Dark mode text color
-                        : AppColors.textColor, // Light mode text color
+                        ? AppColors.backgroundColor
+                        : AppColors.textColor,
                     fontSize: textSizeMedium,
                     fontWeight: FontWeight.w200,
                   ).merge(GoogleFonts.josefinSans()),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: blockSpacing),
-                Text(
-                  'BUS : BS04HW',
-                  style: TextStyle(
-                    color: themeController.isDarkMode.value
-                        ? AppColors
-                            .backgroundColor // Dark mode primary color
-                        : AppColors.primaryColor, // Light mode primary color
-                    fontSize: textSizeLarge,
-                    fontWeight: FontWeight.bold,
-                  ).merge(GoogleFonts.josefinSans()),
-                  textAlign: TextAlign.center,
+                SizedBox(height: screenHeight * 0.1),
+                Padding(
+                  padding: const EdgeInsets.only(left: 100),
+                  child: Row(
+                    children: [
+                      Text(
+                        'BUS ',
+                        style: TextStyle(
+                          color: themeController.isDarkMode.value
+                              ? AppColors.backgroundColor
+                              : AppColors.primaryColor,
+                          fontSize: textSizeLarge,
+                          fontWeight: FontWeight.bold,
+                        ).merge(GoogleFonts.josefinSans()),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(width: screenWidth * 0.1),
+                      DropdownButton<String>(
+                        value: selectedBusNumber,
+                        hint: const Text('Select Bus Number'),
+                        items: busNumbers.map((String number) {
+                          return DropdownMenuItem<String>(
+                            value: number,
+                            child: Text(number),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          selectedBusNumber = newValue;
+                        },
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(height: screenHeight * 0.1),
                 CustomElevatedButton(
@@ -81,9 +100,7 @@ class ConfirmBusScreen extends StatelessWidget {
                   buttonColor: themeController.isDarkMode.value
                       ? AppColors.primaryColorDarker
                       : AppColors.primaryColor,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.whiteColor
-                      : AppColors.whiteColor,
+                  textColor: AppColors.whiteColor,
                   onPressed: () {
                     Get.offAll(const HomePage());
                   },
@@ -94,9 +111,7 @@ class ConfirmBusScreen extends StatelessWidget {
                   buttonColor: themeController.isDarkMode.value
                       ? AppColors.backgroundColorsDarker
                       : Colors.grey,
-                  textColor: themeController.isDarkMode.value
-                      ? AppColors.whiteColor
-                      : AppColors.whiteColor,
+                  textColor: AppColors.whiteColor,
                   onPressed: () {
                     Get.to(const NotConfirmBusScreen());
                   },

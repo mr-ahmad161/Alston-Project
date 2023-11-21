@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, file_names
+// ignore_for_file: depend_on_referenced_packages, file_names, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +8,9 @@ import 'package:alston/widgets/customelevatedbutton.dart';
 import 'package:alston/widgets/customtextformfield.dart';
 import 'package:alston/view/confirmbusscreen.dart';
 
+import '../api/api_service.dart';
+
+import '../model/Login/login_response_model.dart';
 import '../utils/theme_controller.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -15,7 +18,46 @@ class SignInScreen extends StatelessWidget {
   final TextEditingController _userId = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
+  final ApiService apiService = Get.put(ApiService());
+
   SignInScreen({Key? key}) : super(key: key);
+
+  LoginResponse? response;
+  Future<void> _checkLoginStatus() async {
+    bool isLoggedIn = await apiService.isUserLoggedIn();
+    if (isLoggedIn) {
+      // User is already logged in, navigate to the home screen or dashboard
+      // Pass the bus numbers to ConfirmBusScreen
+
+      List<String> busNumbers = response!.data.assignedRoutes
+          .map((route) => route.busNumber)
+          .toList();
+      print(busNumbers.toString());
+      Get.offAll(ConfirmBusScreen(busNumbers: busNumbers));
+    }
+  }
+
+  void _attemptLogin(String email, String password) async {
+    response = await apiService.login(email, password);
+    print(response);
+    if (response != null && response?.success == 1) {
+      // Extract bus numbers from the response
+
+      List<String> busNumbers = response!.data.assignedRoutes
+          .map((route) => route.busNumber)
+          .toList();
+      debugPrint("BUS NUMBER");
+      print(busNumbers.toString());
+      debugPrint(busNumbers.length.toString());
+
+      // Pass the bus numbers to ConfirmBusScreen
+      Get.offAll(ConfirmBusScreen(busNumbers: busNumbers));
+    } else {
+      // Login failed, show an error message
+      Get.snackbar('Error', 'Login failed. Please check your credentials.',
+          snackPosition: SnackPosition.BOTTOM);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +105,6 @@ class SignInScreen extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-
                   SizedBox(height: screenHeight * 0.12),
                   Text(
                     'Please Sign In to start your shift',
@@ -85,7 +126,8 @@ class SignInScreen extends StatelessWidget {
                         return "User-Id cannot be empty";
                       }
                       return null;
-                    }, obscureText: false,
+                    },
+                    obscureText: false,
                   ),
                   SizedBox(height: verticalPadding),
                   CustomTextFormField(
@@ -110,7 +152,7 @@ class SignInScreen extends StatelessWidget {
                         : AppColors.whiteColor,
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        Get.offAll(const ConfirmBusScreen());
+                        _attemptLogin(_userId.text, _password.text);
                       }
                     },
                   ),
