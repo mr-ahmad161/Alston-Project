@@ -64,15 +64,15 @@ class _CheckListWidgetState extends State<CheckListWidget> {
                   widget.question,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: screenWidth * 0.04,
+                    fontSize: screenWidth * 0.05,
                   ).merge(GoogleFonts.josefinSans()),
                   textAlign: TextAlign.left,
                 ),
                 SizedBox(height: screenHeight * 0.04),
-                const Text("Please Submit the  Following :",
+                 Text("Please Submit the  Following:",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 23,
+                      fontSize: screenWidth * 0.04,
                     )),
                 SizedBox(height: screenHeight * 0.04),
                 Padding(
@@ -115,6 +115,8 @@ class _CheckListWidgetState extends State<CheckListWidget> {
 
   Widget _buildIcon(IconData icon, bool isSelected, Color color,
       VoidCallback onTap, double size, String text) {
+        double screenWidth = MediaQuery.of(context).size.width;
+       double screenHeight = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -123,15 +125,15 @@ class _CheckListWidgetState extends State<CheckListWidget> {
             children: <Widget>[
               Icon(icon, color: isSelected ? color : Colors.white, size: size),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 0.05,
+                width: screenWidth * 0.05,
               ), // Space between icon and text
               Text(text,
                   style: TextStyle(
-                      color: isSelected ? color : Colors.white, fontSize: 20)),
+                      color: isSelected ? color : Colors.white, fontSize:  screenWidth * 0.04)),
             ],
           ),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.01,
+            height: screenHeight* 0.01,
           )
         ],
       ),
