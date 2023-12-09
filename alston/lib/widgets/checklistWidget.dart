@@ -1,23 +1,28 @@
-// ignore_for_file: library_private_types_in_public_api, file_names, use_build_context_synchronously
-
+import 'dart:io';
+import 'package:alston/model/Prestart%20Activity/prestart_list_model.dart';
+import 'package:alston/api/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import '../utils/appcolors.dart';
 import '../utils/theme_controller.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CheckListWidget extends StatefulWidget {
   final ThemeController themeController;
-  final String question;
+  final PrestartItem prestartItem;
   final Function(bool) onOptionSelected;
-  final double width; // Add a width parameter
+  final double width;
+  final String apiToken;
+
   const CheckListWidget({
     Key? key,
     required this.themeController,
-    required this.question,
+    required this.prestartItem,
     required this.onOptionSelected,
-    this.width = 200, // Set a default width or you can omit it if you want
+    this.width = 200,
+    required this.apiToken,
   }) : super(key: key);
 
   @override
@@ -30,13 +35,10 @@ class _CheckListWidgetState extends State<CheckListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Obtain screen size for responsiveness
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-
-    // Adjust icon size and spacing based on screen size
-    double iconSize = screenWidth * 0.075; // e.g., 7.5% of screen width
-    double spaceBetween = screenHeight * 0.02; // e.g., 2% of screen height
+    double iconSize = screenWidth * 0.075;
+    double spaceBetween = screenHeight * 0.02;
 
     return Obx(() {
       return SizedBox(
@@ -61,7 +63,7 @@ class _CheckListWidgetState extends State<CheckListWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  widget.question,
+                  widget.prestartItem.getFormattedQuestion(),
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: screenWidth * 0.05,
@@ -69,24 +71,26 @@ class _CheckListWidgetState extends State<CheckListWidget> {
                   textAlign: TextAlign.left,
                 ),
                 SizedBox(height: screenHeight * 0.04),
-                 Text("Please Submit the  Following:",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: screenWidth * 0.04,
-                    )),
+                Text(
+                  "Please Submit the  Following:",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenWidth * 0.04,
+                  ),
+                ),
                 SizedBox(height: screenHeight * 0.04),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildIcon(Icons.check, isCorrectSelected, Colors.green,
-                          () {
+                      _buildIcon(Icons.check, isCorrectSelected, Colors.green, () {
                         setState(() {
                           isCorrectSelected = !isCorrectSelected;
                           isWrongSelected = false;
                           widget.onOptionSelected(isCorrectSelected);
                         });
+                        _submitPrestartStep2(true);
                       }, iconSize, "Yes"),
                       SizedBox(width: spaceBetween),
                       _buildIcon(Icons.close, isWrongSelected, Colors.red, () {
@@ -95,13 +99,12 @@ class _CheckListWidgetState extends State<CheckListWidget> {
                           isCorrectSelected = false;
                           widget.onOptionSelected(!isWrongSelected);
                         });
+                        _submitPrestartStep2(false);
                       }, iconSize, "No"),
                       SizedBox(width: spaceBetween),
-                      _buildIcon(Icons.image, false, Colors.white,
-                          _showImageSourceDialog, iconSize, "Upload a Image"),
+                      _buildIcon(Icons.image, false, Colors.white, _showImageSourceDialog, iconSize, "Upload a Image"),
                       SizedBox(width: spaceBetween),
-                      _buildIcon(Icons.edit_note, false, Colors.white,
-                          _showInputDialog, iconSize, "Ask a Question"),
+                      _buildIcon(Icons.edit_note, false, Colors.white, _showInputDialog, iconSize, "Ask a Question"),
                     ],
                   ),
                 ),
@@ -113,10 +116,10 @@ class _CheckListWidgetState extends State<CheckListWidget> {
     });
   }
 
-  Widget _buildIcon(IconData icon, bool isSelected, Color color,
-      VoidCallback onTap, double size, String text) {
-        double screenWidth = MediaQuery.of(context).size.width;
-       double screenHeight = MediaQuery.of(context).size.height;
+  Widget _buildIcon(IconData icon, bool isSelected, Color color, VoidCallback onTap, double size, String text) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -126,14 +129,18 @@ class _CheckListWidgetState extends State<CheckListWidget> {
               Icon(icon, color: isSelected ? color : Colors.white, size: size),
               SizedBox(
                 width: screenWidth * 0.05,
-              ), // Space between icon and text
-              Text(text,
-                  style: TextStyle(
-                      color: isSelected ? color : Colors.white, fontSize:  screenWidth * 0.04)),
+              ),
+              Text(
+                text,
+                style: TextStyle(
+                  color: isSelected ? color : Colors.white,
+                  fontSize: screenWidth * 0.04,
+                ),
+              ),
             ],
           ),
           SizedBox(
-            height: screenHeight* 0.01,
+            height: screenHeight * 0.01,
           )
         ],
       ),
@@ -150,16 +157,14 @@ class _CheckListWidgetState extends State<CheckListWidget> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: const Icon(
-                    Icons.image), // Use your AppColors.primaryColor if needed
+                leading: const Icon(Icons.image),
                 title: const Text("Choose from Gallery"),
                 onTap: () {
                   _pickImage(ImageSource.gallery);
                 },
               ),
               ListTile(
-                leading: const Icon(
-                    Icons.camera), // Use your AppColors.primaryColor if needed
+                leading: const Icon(Icons.camera),
                 title: const Text("Take a Photo"),
                 onTap: () {
                   _pickImage(ImageSource.camera);
@@ -177,11 +182,7 @@ class _CheckListWidgetState extends State<CheckListWidget> {
     try {
       final pickedFile = await picker.pickImage(source: source);
       if (pickedFile != null) {
-        // Use the picked file
-        // Example: setState(() => _imageFile = File(pickedFile.path));
-
-        // If you need to upload the image or do anything else with it,
-        // you can do that here.
+        _uploadPhoto(File(pickedFile.path));
       }
     } catch (e) {
       debugPrint("Image picker error: $e");
@@ -214,5 +215,48 @@ class _CheckListWidgetState extends State<CheckListWidget> {
         );
       },
     );
+  }
+  final String _baseUrl = 'https://cloudfront.safelineworld.com/api';
+  Future<void> _submitPrestartStep2(bool isCorrect) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/submit-prestart-question'),
+        body: {
+          'api_token': widget.apiToken,
+          'prestart_id': widget.prestartItem.prestartId.toString(),
+          'flag': isCorrect ? '1' : '0',
+          'note': 'YOUR_NOTE', // Replace with the actual note
+        },
+      );
+
+      if (response.statusCode == 200) {
+        print('Prestart Step 2 submitted successfully');
+      } else {
+        debugPrint('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Exception caught: $e');
+    }
+  }
+
+  Future<void> _uploadPhoto(File photoFile) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/api/submit-prestart-photo'),
+        body: {
+          'api_token': widget.apiToken,
+          'prestart_id': widget.prestartItem.prestartId.toString(),
+        },
+        files: [http.MultipartFile.fromBytes('photo', await photoFile.readAsBytes())],
+      );
+
+      if (response.statusCode == 200) {
+        print('Photo uploaded successfully');
+      } else {
+        debugPrint('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint('Exception caught: $e');
+    }
   }
 }
